@@ -120,7 +120,7 @@ public class GeneticAlgorithm {
             List<Integer> parent2SequenceCopy = new ArrayList<>(parent2.getSequence());
             List<Integer> parent3SequenceCopy = new ArrayList<>(parent1.getSequence());
             List<Integer> parent4SequenceCopy = new ArrayList<>(parent2.getSequence());
-            System.out.println("删除"+startGene);
+            //System.out.println("删除"+startGene);
             parent1SequenceCopy.remove(Integer.valueOf(startGene));
             parent2SequenceCopy.remove(Integer.valueOf(startGene));
             parent3SequenceCopy.remove(Integer.valueOf(startGene));
@@ -138,36 +138,36 @@ public class GeneticAlgorithm {
 
                 if (distance1 >= distance2) {
                     child1Sequence.add(nextGene2);
-                    System.out.println("子代"+child1Sequence);
+                    //System.out.println("子代"+child1Sequence);
                     startGene = nextGene2;
                     nextGeneIndex1 = (parent1SequenceCopy.indexOf(startGene)+1) % parent1SequenceCopy.size();
                     nextGeneIndex2 = (parent2SequenceCopy.indexOf(startGene)+1) % parent2SequenceCopy.size();
-                    System.out.println("索引"+nextGeneIndex1+","+nextGeneIndex2);
-                    System.out.println(parent1SequenceCopy);
-                    System.out.println(parent2SequenceCopy);
+                    //System.out.println("索引"+nextGeneIndex1+","+nextGeneIndex2);
+                    //System.out.println(parent1SequenceCopy);
+                    //System.out.println(parent2SequenceCopy);
                     nextGene1 = parent1SequenceCopy.get(nextGeneIndex1);
                     nextGene2 = parent2SequenceCopy.get(nextGeneIndex2);
-                    System.out.println("数字"+nextGene1+","+nextGene2);
+                    //System.out.println("数字"+nextGene1+","+nextGene2);
                     parent1SequenceCopy.remove(Integer.valueOf(startGene));
                     parent2SequenceCopy.remove(Integer.valueOf(startGene));
-                    System.out.println(parent1SequenceCopy);
-                    System.out.println(parent2SequenceCopy);
+                    //System.out.println(parent1SequenceCopy);
+                    //System.out.println(parent2SequenceCopy);
                 } else {
                     child1Sequence.add(nextGene1);
-                    System.out.println("子代"+child1Sequence);
+                    //System.out.println("子代"+child1Sequence);
                     startGene = nextGene1;
                     nextGeneIndex1 = (parent1SequenceCopy.indexOf(startGene)+1) % parent1SequenceCopy.size();
                     nextGeneIndex2 = (parent2SequenceCopy.indexOf(startGene)+1) % parent2SequenceCopy.size();
-                    System.out.println("索引"+nextGeneIndex1+","+nextGeneIndex2);
-                    System.out.println(parent1SequenceCopy);
-                    System.out.println(parent2SequenceCopy);
+                    //System.out.println("索引"+nextGeneIndex1+","+nextGeneIndex2);
+                   // System.out.println(parent1SequenceCopy);
+                    //System.out.println(parent2SequenceCopy);
                     nextGene1 = parent1SequenceCopy.get(nextGeneIndex1);
                     nextGene2 = parent2SequenceCopy.get(nextGeneIndex2);
-                    System.out.println("数字"+nextGene1+","+nextGene2);
+                    //System.out.println("数字"+nextGene1+","+nextGene2);
                     parent1SequenceCopy.remove(Integer.valueOf(startGene));
                     parent2SequenceCopy.remove(Integer.valueOf(startGene));
-                    System.out.println(parent1SequenceCopy);
-                    System.out.println(parent2SequenceCopy);
+                    //System.out.println(parent1SequenceCopy);
+                    //System.out.println(parent2SequenceCopy);
                 }
             }
             while (child2Sequence.size() < parent1.getSequence().size()&&parent3SequenceCopy.size()>0&&parent4SequenceCopy.size()>0 ){
@@ -178,36 +178,36 @@ public class GeneticAlgorithm {
 
                 if (distance1 >= distance2) {
                     child2Sequence.add(nextGene2);
-                    System.out.println("子代"+child2Sequence);
+                    //System.out.println("子代"+child2Sequence);
                     startGene = nextGene2;
                     nextGeneIndex1 = (parent3SequenceCopy.indexOf(startGene)-1+parent3SequenceCopy.size()) % parent3SequenceCopy.size();
                     nextGeneIndex2 = (parent4SequenceCopy.indexOf(startGene)-1+parent3SequenceCopy.size()) % parent4SequenceCopy.size();
-                    System.out.println("索引"+nextGeneIndex1+","+nextGeneIndex2);
-                    System.out.println(parent3SequenceCopy);
-                    System.out.println(parent4SequenceCopy);
+                    //System.out.println("索引"+nextGeneIndex1+","+nextGeneIndex2);
+                    //System.out.println(parent3SequenceCopy);
+                    //System.out.println(parent4SequenceCopy);
                     nextGene1 = parent3SequenceCopy.get(nextGeneIndex1);
                     nextGene2 = parent4SequenceCopy.get(nextGeneIndex2);
-                    System.out.println("数字"+nextGene1+","+nextGene2);
+                    //System.out.println("数字"+nextGene1+","+nextGene2);
                     parent3SequenceCopy.remove(Integer.valueOf(startGene));
                     parent4SequenceCopy.remove(Integer.valueOf(startGene));
-                    System.out.println(parent3SequenceCopy);
-                    System.out.println(parent4SequenceCopy);
+                    //System.out.println(parent3SequenceCopy);
+                    //System.out.println(parent4SequenceCopy);
                 } else {
                     child2Sequence.add(nextGene1);
-                    System.out.println("子代"+child2Sequence);
+                    //System.out.println("子代"+child2Sequence);
                     startGene = nextGene1;
                     nextGeneIndex1 = (parent3SequenceCopy.indexOf(startGene)-1+parent3SequenceCopy.size()) % parent3SequenceCopy.size();
                     nextGeneIndex2 = (parent4SequenceCopy.indexOf(startGene)-1+parent3SequenceCopy.size()) % parent4SequenceCopy.size();
-                    System.out.println("索引"+nextGeneIndex1+","+nextGeneIndex2);
-                    System.out.println(parent3SequenceCopy);
-                    System.out.println(parent4SequenceCopy);
+                    //System.out.println("索引"+nextGeneIndex1+","+nextGeneIndex2);
+                    //System.out.println(parent3SequenceCopy);
+                    //System.out.println(parent4SequenceCopy);
                     nextGene1 = parent3SequenceCopy.get(nextGeneIndex1);
                     nextGene2 = parent4SequenceCopy.get(nextGeneIndex2);
-                    System.out.println("数字"+nextGene1+","+nextGene2);
+                    //System.out.println("数字"+nextGene1+","+nextGene2);
                     parent3SequenceCopy.remove(Integer.valueOf(startGene));
                     parent4SequenceCopy.remove(Integer.valueOf(startGene));
-                    System.out.println(parent3SequenceCopy);
-                    System.out.println(parent4SequenceCopy);
+                    //System.out.println(parent3SequenceCopy);
+                    //System.out.println(parent4SequenceCopy);
                 }
             }
 
@@ -309,7 +309,7 @@ public class GeneticAlgorithm {
         List<Integer> sequence = chromosome.getSequence();
         double totalDistance = 0;
         int i = 0;
-        AStar aStar = new AStar(getNodeById(0), getNodeById(sequence.get(i)), nodes, roads);
+        AStar aStar = new AStar(startNode, getNodeById(sequence.get(i)), nodes, roads);
         PathAndWay search = aStar.search();
         totalDistance += search.getDistance();
         for ( i = 0; i < sequence.size() - 1; i++) {
@@ -334,7 +334,7 @@ public class GeneticAlgorithm {
         search = aStar.search();
         totalDistance += search.getDistance();
         chromosome.setFitness(1/totalDistance);
-        System.out.println(1/totalDistance);
+        //System.out.println(1/totalDistance);
     }
     public void show(Chromosome chromosome){
         List<Integer> sequence = chromosome.getSequence();
@@ -342,11 +342,12 @@ public class GeneticAlgorithm {
         int i = 0;
         List<Integer> pathRecord = new ArrayList<>();
 
-        AStar aStar = new AStar(getNodeById(0), getNodeById(sequence.get(i)), nodes, roads);
-        System.out.println("到达"+getNodeById(0).getId()+"节点");
+        AStar aStar = new AStar(startNode, getNodeById(sequence.get(i)), nodes, roads);
+        System.out.println("到达"+startNode.getId()+"节点");
         PathAndWay search = aStar.search();
         totalDistance += search.getDistance();
-        pathRecord.add(getNodeById(0).getId());
+        pathRecord.add(startNode.getId());
+        pathRecord.addAll(search.path);
         for ( i = 0; i < sequence.size() - 1; i++) {
             if (couldService(getNodeById(sequence.get(i)), robot, maxLoad)) {
                 robot.setBooksToDispatch(robot.getBooksToDispatch() - getNodeById(sequence.get(i)).getBooksToDropOff());
@@ -389,7 +390,7 @@ public class GeneticAlgorithm {
         totalDistance += search.getDistance();
         pathRecord.addAll(search.path);
         //回充电站
-        aStar = new AStar(getNodeById(sequence.get(i)), startNode, nodes, roads);
+        aStar = new AStar(getNodeById(unloadPoint), startNode, nodes, roads);
         search = aStar.search();
         totalDistance += search.getDistance();
         pathRecord.addAll(search.path);
