@@ -113,6 +113,9 @@ class Robot {
         this.booksToDispatch = booksToDispatch;
         this.speed = speed;
     }
+    public int getSpeed(){
+        return speed;
+    }
 
     public int getBooksToRecycle() {
         return booksToRecycle;

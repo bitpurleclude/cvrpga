@@ -279,7 +279,7 @@ public class GeneticAlgorithm {
     public void mutation() {
         Random random = new Random();
         // Define the mutation rate
-        double mutationRate = 0.05;
+        double mutationRate = 0.01;
 
         // Perform mutation on some chromosomes
         for (Chromosome chromosome : population) {
@@ -299,9 +299,9 @@ public class GeneticAlgorithm {
 
     public Chromosome run(int iterations) {
         for (int i = 0; i < iterations; i++) {
-            System.out.println("population size: " + population.size());
+            //System.out.println("population size: " + population.size());
             selection();
-            System.out.println("population size: " + population.size());
+            //System.out.println("population size: " + population.size());
             //crossover();
             heuristicCrossover();
             mutation();
@@ -366,7 +366,7 @@ public class GeneticAlgorithm {
         aStar = new AStar(currentNode, startNode, nodes, roads);
         search = aStar.search();
         totalDistance += search.getDistance();
-        chromosome.setFitness(1/totalDistance);
+        chromosome.setFitness(robot.getSpeed()/totalDistance);
         //System.out.println(1/totalDistance);
         //System.out.println(1/totalDistance);
     }
@@ -449,9 +449,9 @@ public class GeneticAlgorithm {
         totalDistance += search.getDistance();
         pathRecord.addAll(search.path);
         System.out.println("回到充电站");
-        chromosome.setFitness(1/totalDistance);
+        //chromosome.setFitness(robot.getSpeed()/totalDistance);
         System.out.println(pathRecord);
-        System.out.println(1/totalDistance);
+        System.out.println(robot.getSpeed()/totalDistance);
     }
     public void show1(Chromosome chromosome){
         List<Integer> sequence = chromosome.getSequence();
