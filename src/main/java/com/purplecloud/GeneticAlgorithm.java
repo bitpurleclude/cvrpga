@@ -59,50 +59,65 @@ public class GeneticAlgorithm {
             //System.out.println(chromosome.toString());
             this.population.add(chromosome);
         }
+        System.out.println("生成完成population size: " + population.size());
     }
     public void selection() {
-        // Calculate the total fitness of the population
-        double totalFitness = population.stream().mapToDouble(Chromosome::getFitness).sum();
+        population.sort((c1, c2) -> Double.compare(c2.getFitness(), c1.getFitness()));
 
-        // Create a list for the new population
-        List<Chromosome> newPopulation = new ArrayList<>();
+        // Calculate the index up to which to keep chromosomes
+        int keepIndex = population.size() / 2; // Keep only half of the population
 
-        // Select chromosomes to the new population based on their fitness
-        for (int i = 0; i < population.size(); i++) {
-            double rand = Math.random() * totalFitness;
-            double cumulativeFitness = 0.0;
-
-            for (Chromosome chromosome : population) {
-                cumulativeFitness += chromosome.getFitness();
-                if (cumulativeFitness >= rand) {
-                    newPopulation.add(chromosome);
-                    break;
-                }
-            }
-        }
+        // Keep only the top 50% of the chromosomes
+        List<Chromosome> newPopulation = new ArrayList<>(population.subList(0, keepIndex));
 
         // If the size of the new population is odd, select one more chromosome
-        if (newPopulation.size() % 2 != 0) {
-            double rand = Math.random() * totalFitness;
-            double cumulativeFitness = 0.0;
-
-            for (Chromosome chromosome : population) {
-                cumulativeFitness += chromosome.getFitness();
-                if (cumulativeFitness >= rand) {
-                    newPopulation.add(chromosome);
-                    break;
-                }
-            }
+        if (population.size() % 2 != 0) {
+            newPopulation.add(population.get(0)); // Add the fittest chromosome again
         }
+        // Calculate the total fitness of the population
+//        double totalFitness = population.stream().mapToDouble(Chromosome::getFitness).sum();
+//
+//        // Create a list for the new population
+//        List<Chromosome> newPopulation = new ArrayList<>();
+//
+//        // Select chromosomes to the new population based on their fitness
+//        for (int i = 0; i < population.size(); i++) {
+//            double rand = Math.random() * totalFitness;
+//            double cumulativeFitness = 0.0;
+//
+//            for (Chromosome chromosome : population) {
+//                cumulativeFitness += chromosome.getFitness();
+//                if (cumulativeFitness >= rand) {
+//                    newPopulation.add(chromosome);
+//                    break;
+//                }
+//            }
+//        }
+//
+//        // If the size of the new population is odd, select one more chromosome
+//        if (newPopulation.size() % 2 != 0) {
+//            double rand = Math.random() * totalFitness;
+//            double cumulativeFitness = 0.0;
+//
+//            for (Chromosome chromosome : population) {
+//                cumulativeFitness += chromosome.getFitness();
+//                if (cumulativeFitness >= rand) {
+//                    newPopulation.add(chromosome);
+//                    break;
+//                }
+//            }
+//        }
 
         // Replace the old population with the new one
         population = newPopulation;
     }
     public void heuristicCrossover() {
         Random random = new Random();
-        List<Chromosome> newOffspring = new ArrayList<>();
+        int size = population.size();
 
-        for (int i = 0; i < population.size(); i += 2) {
+
+        for (int i = 0; i < size; i += 2) {
+            //System.out.println("生成一次后代population size: " + population.size());
             Chromosome parent1 = population.get(i);
             Chromosome parent2 = population.get(i + 1);
 
@@ -215,10 +230,10 @@ public class GeneticAlgorithm {
             Chromosome child2 = new Chromosome(child2Sequence);
             getFitness(child1);
             getFitness(child2);
-            newOffspring.add(child1);
+            population.add(child1);
+            population.add(child2);
         }
 
-        population = newOffspring;
     }
 
     public double distance(int gene1, int gene2) {
@@ -284,7 +299,9 @@ public class GeneticAlgorithm {
 
     public Chromosome run(int iterations) {
         for (int i = 0; i < iterations; i++) {
+            //System.out.println("population size: " + population.size());
             selection();
+            //System.out.println("population size: " + population.size());
             //crossover();
             heuristicCrossover();
             mutation();
@@ -309,34 +326,134 @@ public class GeneticAlgorithm {
         List<Integer> sequence = chromosome.getSequence();
         double totalDistance = 0;
         int i = 0;
-        AStar aStar = new AStar(startNode, getNodeById(sequence.get(i)), nodes, roads);
-        PathAndWay search = aStar.search();
-        totalDistance += search.getDistance();
+        Node currentNode = startNode;
+        AStar aStar=null;
+        PathAndWay search=null;
         for ( i = 0; i < sequence.size() - 1; i++) {
             if (couldService(getNodeById(sequence.get(i)), robot, maxLoad)) {
+                aStar = new AStar(currentNode, getNodeById(sequence.get(i)), nodes, roads);
+                search = aStar.search();
+                totalDistance += search.getDistance();
+                currentNode = getNodeById(sequence.get(i));
                 robot.setBooksToDispatch(robot.getBooksToDispatch() - getNodeById(sequence.get(i)).getBooksToDropOff());
                 robot.setBooksToRecycle(robot.getBooksToRecycle() + getNodeById(sequence.get(i)).getBooksToPickUp());
             }else {
-                aStar = new AStar(getNodeById(sequence.get(i)), getNodeById(unloadPoint), nodes, roads);
+                aStar = new AStar(currentNode, getNodeById(unloadPoint), nodes, roads);
                 search = aStar.search();
                 totalDistance += search.getDistance();
                 robot.setBooksToRecycle(0); // Drop off books
-                robot.setBooksToDispatch(unloadNode.getBooksToPickUp());
+                robot.setBooksToDispatch(
+                        book(getNodeById(sequence.get(i)).getBooksToDropOff(),
+                                getNodeById(sequence.get(i)).getBooksToPickUp(),
+                                maxLoad,getNodeById(unloadPoint).getBooksToPickUp()));
+                aStar = new AStar(unloadNode, getNodeById(sequence.get(i)), nodes, roads);
+                search = aStar.search();
                 totalDistance += search.getDistance();
+                currentNode = getNodeById(sequence.get(i));
                 robot.setBooksToDispatch(robot.getBooksToDispatch() - getNodeById(sequence.get(i)).getBooksToDropOff());
                 robot.setBooksToRecycle(robot.getBooksToRecycle() + getNodeById(sequence.get(i)).getBooksToPickUp());
             }
-            aStar = new AStar(getNodeById(sequence.get(i)), getNodeById(sequence.get(i + 1)), nodes, roads);
-            search = aStar.search();
-            totalDistance += search.getDistance();
+//            aStar = new AStar(getNodeById(sequence.get(i)), getNodeById(sequence.get(i + 1)), nodes, roads);
+//            search = aStar.search();
+//            totalDistance += search.getDistance();
         }
-        aStar = new AStar(getNodeById(sequence.get(i)), startNode, nodes, roads);
+        aStar = new AStar(currentNode, getNodeById(unloadPoint), nodes, roads);
+        search = aStar.search();
+        totalDistance += search.getDistance();
+        currentNode = getNodeById(unloadPoint);
+        robot.setBooksToDispatch(0);
+        robot.setBooksToRecycle(0);
+        aStar = new AStar(currentNode, startNode, nodes, roads);
         search = aStar.search();
         totalDistance += search.getDistance();
         chromosome.setFitness(1/totalDistance);
         //System.out.println(1/totalDistance);
+        //System.out.println(1/totalDistance);
+    }
+    public int book(int nextNeed,int nextGet,int maxLoad,int change){
+        if (nextNeed+change>maxLoad){
+            if (maxLoad-nextNeed+nextGet>maxLoad){
+                return nextNeed;
+            }else {
+                return maxLoad;
+            }
+        }else {
+            if (nextNeed+change-nextNeed+nextGet>maxLoad){
+                return nextNeed;
+            }else {
+                return nextNeed+change;
+            }
+        }
+
     }
     public void show(Chromosome chromosome){
+        List<Integer> sequence = chromosome.getSequence();
+        double totalDistance = 0;
+        int i = 0;
+        List<Integer> pathRecord = new ArrayList<>();
+        Node currentNode = startNode;
+        AStar aStar=null;
+        PathAndWay search=null;
+        for ( i = 0; i < sequence.size() - 1; i++) {
+            if (couldService(getNodeById(sequence.get(i)), robot, maxLoad)) {
+                aStar = new AStar(currentNode, getNodeById(sequence.get(i)), nodes, roads);
+                search = aStar.search();
+                pathRecord.addAll(search.path);
+                totalDistance += search.getDistance();
+                currentNode = getNodeById(sequence.get(i));
+                System.out.println("到达"+getNodeById(sequence.get(i)).getId()+"节点");
+                robot.setBooksToDispatch(robot.getBooksToDispatch() - getNodeById(sequence.get(i)).getBooksToDropOff());
+                robot.setBooksToRecycle(robot.getBooksToRecycle() + getNodeById(sequence.get(i)).getBooksToPickUp());
+                System.out.println("收回书籍"+getNodeById(sequence.get(i)).getBooksToPickUp());
+                System.out.println("放出书籍"+getNodeById(sequence.get(i)).getBooksToDropOff());
+                System.out.println("已经收取书籍"+robot.getBooksToRecycle());
+                System.out.println("剩余书籍"+robot.getBooksToDispatch());
+            }else {
+                aStar = new AStar(currentNode, getNodeById(unloadPoint), nodes, roads);
+                search = aStar.search();
+                totalDistance += search.getDistance();
+                pathRecord.addAll(search.path);
+                System.out.println("不满足条件,回到补给点");
+                robot.setBooksToRecycle(0); // Drop off books
+                robot.setBooksToDispatch(
+                        book(getNodeById(sequence.get(i)).getBooksToDropOff(),
+                                getNodeById(sequence.get(i)).getBooksToPickUp(),
+                                maxLoad,getNodeById(unloadPoint).getBooksToPickUp()));
+                aStar = new AStar(unloadNode, getNodeById(sequence.get(i)), nodes, roads);
+                search = aStar.search();
+                totalDistance += search.getDistance();
+                pathRecord.addAll(search.path);
+                currentNode = getNodeById(sequence.get(i));
+                System.out.println("到达"+getNodeById(sequence.get(i)).getId()+"节点");
+                robot.setBooksToDispatch(robot.getBooksToDispatch() - getNodeById(sequence.get(i)).getBooksToDropOff());
+                robot.setBooksToRecycle(robot.getBooksToRecycle() + getNodeById(sequence.get(i)).getBooksToPickUp());
+                System.out.println("收回书籍"+getNodeById(sequence.get(i)).getBooksToPickUp());
+                System.out.println("放出书籍"+getNodeById(sequence.get(i)).getBooksToDropOff());
+                System.out.println("已经收取书籍"+robot.getBooksToRecycle());
+                System.out.println("剩余书籍"+robot.getBooksToDispatch());
+            }
+//            aStar = new AStar(getNodeById(sequence.get(i)), getNodeById(sequence.get(i + 1)), nodes, roads);
+//            search = aStar.search();
+//            totalDistance += search.getDistance();
+        }
+        aStar = new AStar(currentNode, getNodeById(unloadPoint), nodes, roads);
+        search = aStar.search();
+        totalDistance += search.getDistance();
+        pathRecord.addAll(search.path);
+        currentNode = getNodeById(unloadPoint);
+        System.out.println("回到图书馆");
+        robot.setBooksToDispatch(0);
+        robot.setBooksToRecycle(0);
+        aStar = new AStar(currentNode, startNode, nodes, roads);
+        search = aStar.search();
+        totalDistance += search.getDistance();
+        pathRecord.addAll(search.path);
+        System.out.println("回到充电站");
+        chromosome.setFitness(1/totalDistance);
+        System.out.println(pathRecord);
+        System.out.println(1/totalDistance);
+    }
+    public void show1(Chromosome chromosome){
         List<Integer> sequence = chromosome.getSequence();
         double totalDistance = 0;
         int i = 0;
