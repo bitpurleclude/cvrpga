@@ -78,7 +78,7 @@ public class Main {
         roads.add(new Road(33,34,0.3,"香港路"));
         roads.add(new Road(34,35,0.8,"台湾路"));
 
-        run21(roads);
+        run22(roads);
 
 
     }
@@ -107,14 +107,16 @@ public class Main {
 
         nodes.add(new Node(0,0,20));
         Robot robot = new Robot(0,0,10);
-        GeneticAlgorithm ga = new GeneticAlgorithm(10000, nodes, roads, 20, 10,0,robot);
+        GeneticAlgorithm ga = new GeneticAlgorithm(1000, nodes, roads, 20, 10,0,robot);
         List<Chromosome> population = new ArrayList<>();
         double fitness = 0.0;
         do{
-            Chromosome run = ga.run(1000);
+            Chromosome run = ga.run(100);
             fitness = run.getFitness();
             population.add(run);
-        }while (fitness<0.0051);
+        }while (fitness<0.008);
+//        [1, 7, 6, 7, 13, 14, 20, 14, 8, 2, 3, 9, 15, 14, 20, 14, 15, 9, 10, 11, 17, 16, 15, 14, 20, 14, 13, 7, 13, 14, 20, 14, 8, 2, 3, 4, 10, 9, 15, 14, 20, 14, 15, 16, 10, 4, 5, 4, 10, 9, 15, 14, 20, 14, 8, 7, 6, 0]
+//        0.008084074373484237
     }
     public static void run12(List<Road> roads){
         List<Node>nodes=new ArrayList<>();
@@ -139,14 +141,16 @@ public class Main {
         nodes.add(new Node(2,0,34));
         nodes.add(new Node(0,0,35));
         Robot robot = new Robot(0,0,10);
-        GeneticAlgorithm ga = new GeneticAlgorithm(10000, nodes, roads, 20, 10,0,robot);
+        GeneticAlgorithm ga = new GeneticAlgorithm(1000, nodes, roads, 20, 10,35,robot);
         List<Chromosome> population = new ArrayList<>();
         double fitness = 0.0;
         do{
-            Chromosome run = ga.run(1000);
+            Chromosome run = ga.run(100);
             fitness = run.getFitness();
             population.add(run);
-        }while (fitness<0.0051);
+        }while (fitness<0.008);
+//        [29, 28, 27, 21, 20, 21, 22, 23, 29, 28, 27, 21, 20, 19, 25, 19, 20, 26, 25, 31, 32, 26, 20, 26, 27, 33, 34, 28, 27, 21, 20, 26, 20, 19, 18, 24, 18, 19, 20, 21, 22, 28, 29, 35]
+//        0.018115942028985504
     }
     public static void run21(List<Road> roads){
         List<Node> nodes=new ArrayList<>();
@@ -181,8 +185,41 @@ public class Main {
             fitness = run.getFitness();
             population.add(run);
         }while (fitness<0.0068);
+//        [6, 7, 13, 14, 20, 14, 13, 12, 13, 14, 20, 14, 15, 16, 15, 14, 20, 14, 8, 9, 10, 4, 10, 9, 15, 14, 20, 14, 8, 2, 8, 9, 15, 14, 20, 14, 8, 2, 1, 2, 8, 14, 20, 14, 15, 16, 17, 11, 5, 4, 10, 9, 15, 14, 20, 14, 8, 7, 6, 0]
+//        0.00683526999316473
     }
     public static void run22(List<Road> roads){
+        List<Node>nodes=new ArrayList<>();
+        nodes.add(new Node(2,0,18));
+        nodes.add(new Node(4,0,19));
+        nodes.add(new Node(0,0,20));
+        nodes.add(new Node(0,0,21));
+        nodes.add(new Node(3,0,22));
+        nodes.add(new Node(1,0,23));
 
+        nodes.add(new Node(5,2,24));
+        nodes.add(new Node(3,1,25));
+        nodes.add(new Node(6,0,26));
+        nodes.add(new Node(5,0,27));
+        nodes.add(new Node(6,2,28));
+        nodes.add(new Node(5,0,29));
+
+        nodes.add(new Node(6,0,30));
+        nodes.add(new Node(6,0,31));
+        nodes.add(new Node(2,0,32));
+        nodes.add(new Node(6,0,33));
+        nodes.add(new Node(2,0,34));
+        nodes.add(new Node(0,0,35));
+        Robot robot = new Robot(0,0,10);
+        GeneticAlgorithm ga = new GeneticAlgorithm(1000, nodes, roads, 20, 10,35,robot);
+        List<Chromosome> population = new ArrayList<>();
+        double fitness = 0.0;
+        do{
+            Chromosome run = ga.run(100);
+            fitness = run.getFitness();
+            population.add(run);
+        }while (fitness<0.017);
+//[29, 23, 22, 23, 29, 28, 27, 21, 20, 26, 32, 33, 34, 33, 27, 21, 20, 21, 27, 28, 27, 21, 20, 21, 27, 21, 20, 26, 20, 19, 25, 31, 25, 19, 20, 19, 20, 19, 18, 24, 18, 19, 20, 21, 22, 28, 29, 35]
+//        0.017761989342806393
     }
 }

@@ -299,9 +299,9 @@ public class GeneticAlgorithm {
 
     public Chromosome run(int iterations) {
         for (int i = 0; i < iterations; i++) {
-            //System.out.println("population size: " + population.size());
+            System.out.println("population size: " + population.size());
             selection();
-            //System.out.println("population size: " + population.size());
+            System.out.println("population size: " + population.size());
             //crossover();
             heuristicCrossover();
             mutation();
